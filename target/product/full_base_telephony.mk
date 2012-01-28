@@ -20,10 +20,12 @@
 # entirely appropriate to inherit from for on-device configurations.
 
 PRODUCT_PROPERTY_OVERRIDES := \
-    keyguard.no_require_sim=true
+    keyguard.no_require_sim=true \
 
-PRODUCT_COPY_FILES := \
-    frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
+ifeq ($(CANDY_BUILD),)
+PRODUCT_PROPERTY_OVERRIDES := \
+    ro.com.android.dataroaming=true
+endif
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
