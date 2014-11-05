@@ -1897,7 +1897,6 @@ define build-recoveryramdisk
   $(hide) sed -i 's/persist.sys.usb.config=none/persist.sys.usb.config=adb/g' $(TARGET_RECOVERY_ROOT_OUT)/prop.default
   $(hide) ln -sf prop.default $(TARGET_RECOVERY_ROOT_OUT)/default.prop
   $(BOARD_RECOVERY_IMAGE_PREPARE)
-  $(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 endef
 
 RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
