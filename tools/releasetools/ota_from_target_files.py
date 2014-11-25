@@ -1050,6 +1050,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     if is_system_as_root:
       script.fstab["/system"].mount_point = "/"
 
+  device_specific.FullOTA_PostValidate()
+
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
 
