@@ -818,6 +818,19 @@ def AddImagesToTargetFiles(filename):
         if output_zip:
           vendor_boot_image.AddToZip(output_zip)
 
+  if has_vendor_boot:
+    banner("vendor_boot")
+    vendor_boot_image = common.GetVendorBootImage(
+        "IMAGES/vendor_boot.img", "vendor_boot.img", OPTIONS.input_tmp,
+        "VENDOR_BOOT")
+    if vendor_boot_image:
+      partitions['vendor_boot'] = os.path.join(OPTIONS.input_tmp, "IMAGES",
+                                               "vendor_boot.img")
+      if not os.path.exists(partitions['vendor_boot']):
+        vendor_boot_image.WriteToDir(OPTIONS.input_tmp)
+        if output_zip:
+          vendor_boot_image.AddToZip(output_zip)
+
   recovery_image = None
   if has_recovery:
     banner("recovery")

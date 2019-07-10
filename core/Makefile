@@ -2214,6 +2214,7 @@ else # not (BUILDING_VENDOR_BOOT_IMAGE and AB_OTA_UPDATER)
   INTERNAL_RECOVERYIMAGE_ARGS := \
       $(addprefix --second ,$(INSTALLED_2NDBOOTLOADER_TARGET)) \
       --ramdisk $(recovery_ramdisk)
+
 # Assumes this has already been stripped
 ifdef INTERNAL_KERNEL_CMDLINE
   INTERNAL_RECOVERYIMAGE_ARGS += --cmdline "$(INTERNAL_KERNEL_CMDLINE)"
@@ -2309,7 +2310,6 @@ $(recovery_uncompressed_ramdisk): $(MKBOOTFS) \
 $(recovery_ramdisk): $(recovery_uncompressed_ramdisk) $(COMPRESSION_COMMAND_DEPS)
 	@echo ----- Making compressed recovery ramdisk ------
 	$(COMPRESSION_COMMAND) < $(recovery_uncompressed_ramdisk) > $@
-
 
 # $(1): output file
 # $(2): kernel file
@@ -4397,6 +4397,10 @@ ifneq ($(INSTALLED_VENDOR_BOOTIMAGE_TARGET),)
 	echo "vendor_boot=true" >> $@
 	echo "vendor_boot_size=$(BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE)" >> $@
 endif
+ifneq ($(INSTALLED_VENDOR_BOOTIMAGE_TARGET),)
+	echo "vendor_boot=true" >> $@
+	echo "vendor_boot_size=$(BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE)" >> $@
+endif
 ifeq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 	$(hide) echo "no_recovery=true" >> $@
 endif
@@ -4857,6 +4861,21 @@ endif # BOARD_USES_RECOVERY_AS_BOOT not true
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
 	            mkdir -p $(zip_root)/RADIO; \
 	            cp $(t) $(zip_root)/RADIO/$(notdir $(t));)
+ifdef INSTALLED_VENDOR_BOOTIMAGE_TARGET
+	mkdir -p $(zip_root)/VENDOR_BOOT
+	$(call package_files-copy-root, \
+	    $(TARGET_VENDOR_RAMDISK_OUT),$(zip_root)/VENDOR_BOOT/RAMDISK)
+ifdef INSTALLED_DTBIMAGE_TARGET
+	cp $(INSTALLED_DTBIMAGE_TARGET) $(zip_root)/VENDOR_BOOT/dtb
+endif
+ifdef BOARD_KERNEL_BASE
+	echo "$(BOARD_KERNEL_BASE)" > $(zip_root)/VENDOR_BOOT/base
+endif
+ifdef BOARD_KERNEL_PAGESIZE
+	echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/VENDOR_BOOT/pagesize
+endif
+	echo "$(INTERNAL_KERNEL_CMDLINE)" > $(zip_root)/VENDOR_BOOT/vendor_cmdline
+endif # INSTALLED_VENDOR_BOOTIMAGE_TARGET
 ifdef BOARD_CUSTOM_BOOTIMG
 	@# Prebuilt boot images
 	$(hide) mkdir -p $(zip_root)/BOOTABLE_IMAGES
