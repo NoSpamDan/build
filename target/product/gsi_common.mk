@@ -32,6 +32,7 @@ ifeq ($(CANDY_BUILD),)
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.config.ringtone=Ring_Synth_04.ogg \
     ro.config.notification_sound=pixiedust.ogg \
+
 endif
 
 endif
