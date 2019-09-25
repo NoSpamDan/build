@@ -175,7 +175,6 @@ else
   endif
 endif
 
-
 # Bring in standard build system definitions.
 include $(BUILD_SYSTEM)/definitions.mk
 
@@ -364,6 +363,9 @@ endif
 BUILD_WITHOUT_PV := true
 
 ADDITIONAL_BUILD_PROPERTIES += net.bt.name=Android
+
+# Include Candy versions
+include $(TOPDIR)vendor/candy/build/core/main_version.mk
 
 # ------------------------------------------------------------
 # Define a function that, given a list of module tags, returns
