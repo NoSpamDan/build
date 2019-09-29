@@ -34,7 +34,6 @@ ifeq ($(CANDY_BUILD),)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.ringtone=Ring_Synth_04.ogg \
     ro.com.android.dataroaming=true \
-
 endif
 
 endif
