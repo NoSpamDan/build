@@ -245,8 +245,8 @@ org\.chromium\.arc\..*
 
 ###################################################
 # LineageOS
-lineageos\.platform
-org\.lineageos\.platform\.internal
+#lineageos\.platform
+#org\.lineageos\.platform\.internal
 
 ###################################################
 # CodeAurora IMS functionality needed by frameworks/opt/telephony
