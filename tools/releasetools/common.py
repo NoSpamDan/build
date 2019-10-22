@@ -867,7 +867,7 @@ def GetUserImage(which, tmpdir, input_zip,
     A Image object. If it is a sparse image and reset_file_map is False, the
     image will have file_map info loaded.
   """
-  if info_dict is None:
+  if info_dict == None:
     info_dict = LoadInfoDict(input_zip)
 
   is_sparse = info_dict.get("extfs_sparse_flag")
