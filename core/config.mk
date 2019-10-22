@@ -95,7 +95,7 @@ $(KATI_obsolete_var TARGET_ANDROID_FILESYSTEM_CONFIG_H,Use TARGET_FS_CONFIG_GEN 
 $(KATI_deprecated_var USER,Use BUILD_USERNAME instead. See $(CHANGES_URL)#USER)
 
 # This is marked as obsolete in envsetup.mk after reading the BoardConfig.mk
-#$(KATI_deprecate_export It is a global setting. See $(CHANGES_URL)#export_keyword)
+$(KATI_deprecate_export It is a global setting. See $(CHANGES_URL)#export_keyword)
 
 # Used to force goals to build.  Only use for conditionally defined goals.
 .PHONY: FORCE
@@ -233,9 +233,10 @@ include $(BUILD_SYSTEM)/envsetup.mk
 # See envsetup.mk for a description of SCAN_EXCLUDE_DIRS
 FIND_LEAVES_EXCLUDES := $(addprefix --prune=, $(SCAN_EXCLUDE_DIRS) .repo .git)
 
-# General entries for project pathmap.  Any entries listed here should
-# be device and hardware independent.
-$(call project-set-path-variant,ril,TARGET_RIL_VARIANT,hardware/ril)
+-include vendor/extra/BoardConfigExtra.mk
+ifneq ($(CANDY_BUILD),)
+include vendor/candy/config/BoardConfigCandy.mk
+endif
 
 # The build system exposes several variables for where to find the kernel
 # headers:
@@ -1172,11 +1173,6 @@ dont_bother_goals := out \
     vbmetaimage-nodeps \
     product-graph dump-products
 
--include vendor/extra/BoardConfigExtra.mk
-ifneq ($(CANDY_BUILD),)
-include vendor/candy/config/BoardConfigCandy.mk
-endif
-
 ifeq ($(CALLED_FROM_SETUP),true)
 include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
@@ -1189,21 +1185,20 @@ DEFAULT_DATA_OUT_MODULES := ltp $(ltp_packages) $(kselftest_modules)
 .KATI_READONLY := DEFAULT_DATA_OUT_MODULES
 
 ifneq ($(CANDY_BUILD),)
-ifneq ($(wildcard device/candy/sepolicy/common/sepolicy.mk),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
 $(eval include device/candy/sepolicy/common/sepolicy.mk)
 endif
 
 # Include any vendor specific config.mk file
--include $(TOPDIR)vendor/*/build/core/config.mk
+-include vendor/candy/build/core/config.mk
 
-# Include any vendor specific apicheck.mk file
--include $(TOPDIR)vendor/*/build/core/apicheck.mk
+# Rules for QCOM targets
+-include $(TOPDIR)vendor/candy/build/core/qcom_target.mk
 
 # Rules for MTK targets
--include $(TOPDIR)vendor/*/build/core/mtk_target.mk
-endif
+-include $(TOPDIR)vendor/candy/build/core/mtk_target.mk
+
 
 
 include $(BUILD_SYSTEM)/dumpvar.mk

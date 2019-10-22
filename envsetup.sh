@@ -641,7 +641,7 @@ function brunch()
 {
     breakfast $*
     if [ $? -eq 0 ]; then
-        mka bacon
+        mka candy
     else
         echo "No such item in brunch menu. Try 'breakfast'"
         return 1
@@ -750,8 +750,9 @@ function lunch()
     fi
 
     export TARGET_PRODUCT=$product
-    TARGET_BUILD_VARIANT=$variant
-    TARGET_PLATFORM_VERSION=$version
+    export TARGET_BUILD_VARIANT=$variant
+    export TARGET_PLATFORM_VERSION=$version
+    export TARGET_BUILD_TYPE=release
     build_build_var_cache
 
     if [ $? -ne 0 ]
@@ -784,14 +785,6 @@ function lunch()
         return 1
     fi
 
-    export TARGET_BUILD_VARIANT
-    if [ -n "$version" ]; then
-      export TARGET_PLATFORM_VERSION
-    else
-      unset TARGET_PLATFORM_VERSION
-    fi
-    export TARGET_BUILD_TYPE=release
-
     echo
 
     fixup_common_out_dir
@@ -799,7 +792,6 @@ function lunch()
     set_stuff_for_environment
     printconfig
     destroy_build_var_cache
-
 }
 
 unset COMMON_LUNCH_CHOICES_CACHE
