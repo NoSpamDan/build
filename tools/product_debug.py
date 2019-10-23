@@ -57,7 +57,7 @@ def linkify_inherit(variables, text, func_name):
     result = result + groups[i]
     s = groups[i+1]
     href = s.split(",", 1)[1].strip()[:-1]
-    href = href.replace("$(SRC_TARGET_DIR)", "build/target")
+    href = href.replace("$(SRC_TARGET_DIR)", "build/make/target")
     href = ("../" * variables["FILE"].count("/")) + href + ".html"
     result = result + "<a href=\"%s\">%s</a>" % (href,s)
   result = result + groups[-1]

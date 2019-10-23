@@ -20,7 +20,7 @@ Signs the given zip with the given key producing a new zip.
 Usage:  sign_release_zip [flags] input_zip output_zip
 
   -k (--package_key) <key> Key to use to sign the package (default is
-      "build/target/product/security/testkey").
+      "build/make/target/product/security/testkey").
 """
 import sys
 
@@ -28,7 +28,7 @@ import common
 
 OPTIONS = common.OPTIONS
 
-OPTIONS.package_key = "build/target/product/security/testkey"
+OPTIONS.package_key = "build/make/target/product/security/testkey"
 
 def SignOutput(input_zip_name, output_zip_name):
   key_passwords = common.GetKeyPasswords([OPTIONS.package_key])
